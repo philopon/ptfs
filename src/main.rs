@@ -16,7 +16,13 @@ mod url;
 #[derive(Debug, StructOpt)]
 enum Opt {
     #[structopt(name = "login", about = "login to dropbox")]
-    Login,
+    Login {
+        #[structopt(
+            long = "--no-browser",
+            help = "don't open web browser",
+        )]
+        no_browser: bool,
+    },
     #[structopt(name = "server", about = "start dl-watcher server")]
     Server {
         #[structopt(name = "DST", help = "download directory", default_value = ".")]
@@ -74,7 +80,7 @@ fn main() {
     let opt = Opt::from_args();
 
     let res = match opt {
-        Opt::Login => login::run(),
+        Opt::Login{no_browser} => login::run(no_browser),
         Opt::Server {
             dst,
             timeout,
