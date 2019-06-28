@@ -61,7 +61,12 @@ enum Opt {
         paths: Vec<PathBuf>,
         #[structopt(short = "-q", long = "--quiet", help = "don't display progress bar")]
         quiet: bool,
-        #[structopt(short = "-n", long = "--name", help = "stdin file name")]
+        #[structopt(
+            short = "-n",
+            long = "--name",
+            help = "stdin file name",
+            default_value = "stdin"
+        )]
         name: String,
     },
 }
