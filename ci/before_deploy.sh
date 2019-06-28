@@ -34,9 +34,7 @@ main() {
             ;;
     esac
 
-
-
-    strip $EXECUTABLE
+    $STRIP $EXECUTABLE
     cp $EXECUTABLE $stage/
     cd $stage
     case "$TARGET" in

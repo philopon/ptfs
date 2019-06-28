@@ -32,12 +32,12 @@ main() {
 
     case $TARGET in
         aarch64-*)
-            apt update
-            apt install binutils-aarch64-linux-gnu
+            sudo apt update
+            sudo apt install binutils-aarch64-linux-gnu
             ;;
         arm-*)
-            apt update
-            apt install binutils-arm-linux-gnueabi
+            sudo apt update
+            sudo apt install binutils-arm-linux-gnueabi
             ;;
     esac
 
