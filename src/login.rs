@@ -18,7 +18,9 @@ fn auth(cli: Client, no_browser: bool) -> Result<api::AuthorizeResponse, reqwest
 
 pub fn run(no_browser: bool) -> Result<(), Error> {
     let resp = auth(Client::new(), no_browser)?;
-    Config::from(resp).save()?;
+    let mut config = Config::load().unwrap_or_else(|_| Config::new());
+    config.access_token = resp.access_token;
+    config.save()?;
     log::info!("logged-in");
     Ok(())
 }
