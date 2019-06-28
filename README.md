@@ -9,7 +9,7 @@ features
 2. encryption
 
     * save password: sha256(dropbox user id + ptfs password)
-    * encrypto/decripto: aes256(key=saved password, nonce=0000000000000000)
+    * encrypto/decripto: aes256_ctr(key=saved password, nonce=0000000000000000)
 
 setup
 --
@@ -43,3 +43,9 @@ execute download command (remote machine)
 $ ptfs download file1
 [2019-06-28T00:49:13Z INFO  ptfs::download] file1 is uploaded to Dropbox
 ```
+
+build
+--
+1. fill app.rs
+2. copy app.rs to src/app.rs
+3. cargo build --release

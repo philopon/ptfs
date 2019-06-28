@@ -19,13 +19,14 @@ main() {
 
     cross build --target $TARGET --release
 
+    local EXECUTABLE=target/$TARGET/release/ptfs
     case "$TARGET" in
-        *windows*) cp target/$TARGET/release/ptfs.exe $stage/;;
-        *) cp target/$TARGET/release/ptfs $stage/;;
+        *windows*) EXECUTABLE=${EXECUTABLE}.exe ;;
     esac
 
+    strip $EXECUTABLE
+    cp $EXECUTABLE $stage/
     cd $stage
-
     case "$TARGET" in
         *windows*) zip $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.zip *;;
         *) tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *;;
