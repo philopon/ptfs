@@ -50,6 +50,8 @@ enum Opt {
         paths: Vec<PathBuf>,
         #[structopt(short = "-q", long = "--quiet", help = "don't display progress bar")]
         quiet: bool,
+        #[structopt(short = "-n", long = "--name", help = "stdin file name")]
+        name: String,
     },
 }
 
@@ -91,7 +93,7 @@ fn main() {
             .retry_wait(Duration::from_secs(retry_wait))
             .build()
             .run(),
-        Opt::Download { paths, quiet } => download::run(&paths, quiet),
+        Opt::Download { paths, quiet, name } => download::run(&paths,&name, quiet),
         Opt::Crypto(flag) => crypto::run(flag.into()),
     };
 
