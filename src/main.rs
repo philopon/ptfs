@@ -87,10 +87,11 @@ impl Into<crypto::Mode> for CryptoOpt {
 }
 
 fn main() {
-    std::env::set_var("RUST_LOG", "info");
-    env_logger::init();
-
     let opt = Opt::from_args();
+    if let Err(_) = std::env::var("RUST_LOG") {
+        std::env::set_var("RUST_LOG", "info");
+    }
+    env_logger::init();
 
     let res = match opt {
         Opt::Login { no_browser } => login::run(no_browser),
