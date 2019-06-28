@@ -36,6 +36,9 @@ pub struct Config {
 pub struct ConfigLoadError(io::Error, PathBuf);
 
 impl Config {
+    pub fn new() -> Config {
+        Config{access_token: api::AccessToken::new(), password: None}
+    }
     pub fn save(&self) -> Result<(), io::Error> {
         if let Some(parent) = LOGIN_JSON_PATH.parent() {
             fs::create_dir_all(parent)?;

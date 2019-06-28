@@ -19,13 +19,24 @@ main() {
 
     cross build --target $TARGET --release
 
+    local EXECUTABLE=target/$TARGET/release/ptfs
     case "$TARGET" in
-        *windows*) cp target/$TARGET/release/ptfs.exe $stage/;;
-        *) cp target/$TARGET/release/ptfs $stage/;;
+        *windows*) EXECUTABLE=${EXECUTABLE}.exe ;;
     esac
 
-    cd $stage
+    local STRIP=strip
+    case $TARGET in
+        aarch64-*)
+            STRIP=aarch64-linux-gnu-strip
+            ;;
+        arm-*)
+            STRIP=arm-linux-gnueabi-strip
+            ;;
+    esac
 
+    $STRIP $EXECUTABLE
+    cp $EXECUTABLE $stage/
+    cd $stage
     case "$TARGET" in
         *windows*) zip $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.zip *;;
         *) tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *;;

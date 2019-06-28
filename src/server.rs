@@ -128,6 +128,8 @@ impl Server {
     }
 
     pub fn run(mut self) -> Result<(), Error> {
+        log::info!("download directory: {}", self.dst.display());
+        log::info!("server start");
         let config = Config::load()?;
         let gen = config.cipher_gen()?;
         self.access_token = config.access_token;

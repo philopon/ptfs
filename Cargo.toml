@@ -1,6 +1,6 @@
 [package]
 name = "ptfs"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Hirotomo Moriwaki <philopon.dependence@gmail.com>"]
 edition = "2018"
 
@@ -21,6 +21,11 @@ indicatif = "0.11.0"
 rpassword = "3.0.2"
 aes-ctr = "0.3.0"
 rustc-hex = "2.0.1"
+atty = "0.2.11"
 
 [profile.release]
 lto = true
+codegen-units = 1
+panic = 'abort'
+opt-level = 3
+debug-assertions = false
