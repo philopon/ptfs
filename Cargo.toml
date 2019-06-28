@@ -1,6 +1,6 @@
 [package]
 name = "ptfs"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Hirotomo Moriwaki <philopon.dependence@gmail.com>"]
 edition = "2018"
 
