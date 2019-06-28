@@ -3,6 +3,7 @@ use std::process;
 use std::time::Duration;
 
 use structopt::StructOpt;
+use lazy_static::lazy_static;
 
 mod api;
 mod app;
@@ -13,19 +14,29 @@ mod login;
 mod server;
 mod url;
 
+lazy_static! {
+    static ref DEFAULT_DST: String = {
+        match dirs::download_dir() {
+            Some(dl) => format!("{}", dl.display()),
+            None => ".".to_string(),
+        }
+    };
+}
+
 #[derive(Debug, StructOpt)]
 enum Opt {
     #[structopt(name = "login", about = "login to dropbox")]
     Login {
-        #[structopt(
-            long = "--no-browser",
-            help = "don't open web browser",
-        )]
+        #[structopt(long = "--no-browser", help = "don't open web browser")]
         no_browser: bool,
     },
     #[structopt(name = "server", about = "start dl-watcher server")]
     Server {
-        #[structopt(name = "DST", help = "download directory", default_value = ".")]
+        #[structopt(
+            name = "DST",
+            help = "download directory",
+            raw(default_value = "&DEFAULT_DST")
+        )]
         dst: PathBuf,
         #[structopt(
             short = "-t",
@@ -82,7 +93,7 @@ fn main() {
     let opt = Opt::from_args();
 
     let res = match opt {
-        Opt::Login{no_browser} => login::run(no_browser),
+        Opt::Login { no_browser } => login::run(no_browser),
         Opt::Server {
             dst,
             timeout,
@@ -93,7 +104,7 @@ fn main() {
             .retry_wait(Duration::from_secs(retry_wait))
             .build()
             .run(),
-        Opt::Download { paths, quiet, name } => download::run(&paths,&name, quiet),
+        Opt::Download { paths, quiet, name } => download::run(&paths, &name, quiet),
         Opt::Crypto(flag) => crypto::run(flag.into()),
     };
 
