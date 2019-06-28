@@ -27,8 +27,8 @@ main() {
     cd $stage
 
     case "$TARGET" in
-        *windows*) zip $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.zip *
-        *) tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *
+        *windows*) zip $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.zip *;;
+        *) tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *;;
     esac
     cd $src
 
