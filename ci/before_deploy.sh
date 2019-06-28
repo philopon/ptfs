@@ -24,6 +24,18 @@ main() {
         *windows*) EXECUTABLE=${EXECUTABLE}.exe ;;
     esac
 
+    local STRIP=strip
+    case $TARGET in
+        aarch64-*)
+            STRIP=aarch64-linux-gnu-strip
+            ;;
+        arm-*)
+            STRIP=arm-linux-gnueabi-strip
+            ;;
+    esac
+
+
+
     strip $EXECUTABLE
     cp $EXECUTABLE $stage/
     cd $stage

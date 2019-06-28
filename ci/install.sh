@@ -30,6 +30,17 @@ main() {
             ;;
     esac
 
+    case $TARGET in
+        aarch64-*)
+            apt update
+            apt install binutils-aarch64-linux-gnu
+            ;;
+        arm-*)
+            apt update
+            apt install binutils-arm-linux-gnueabi
+            ;;
+    esac
+
     # This fetches latest stable release
     local tag=$(git ls-remote --tags --refs --exit-code https://github.com/japaric/cross \
                        | cut -d/ -f3 \
