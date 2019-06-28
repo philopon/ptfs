@@ -1,0 +1,63 @@
+# Based on the "trust" template v0.1.2
+# https://github.com/japaric/trust/tree/v0.1.2
+
+dist: trusty
+language: rust
+services: docker
+sudo: required
+
+env:
+  global:
+    - CRATE_NAME=ptfs
+
+matrix:
+  include:
+    # Linux
+    - env: TARGET=arm-unknown-linux-gnueabi
+    - env: TARGET=x86_64-unknown-linux-musl
+
+    # OSX
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+
+    # *BSD
+    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+
+    # Windows
+    - env: TARGET=x86_64-pc-windows-gnu
+
+before_install:
+  - set -e
+  - rustup self update
+  - openssl aes-256-cbc -K $encrypted_532543ccea7f_key -iv $encrypted_532543ccea7f_iv -in src/app.rs.enc -out src/app.rs -d
+
+install:
+  - sh ci/install.sh
+  - source ~/.cargo/env || true
+
+script:
+  - bash ci/script.sh
+
+after_script: set +e
+
+before_deploy:
+  - sh ci/before_deploy.sh
+
+deploy:
+  api_key:
+    secure: "NNgenWcq5RwNhmheb06pUqtMumRnHczjZElm48S+XbDSsvWkbgZXfPNiuZbHdve338WCUxMLOdIVMv2VG5JldxemPew30eZCOCXIR8kbWAofCQ3/b7rOibihrQAvVYoPIi39+JDGYTgRBbz6homsg/eHNpdVT7Wlec11QmyQJBQSk6g07VL/s0JlXkubYyBj4tM4qTHtwW+LNT+rLGceklbYkNyB7bOU+jxfDLo1hn6mFv0VcudJpg8/huYEaJ/d/v6hmpmzPxJeU3DoONhOLO3FY9CU57Ro1QXeIJhzBB9+HPRjI7CWpTnH0rPZmDmVN7rHT0eH7vSF+w4OE0YdsuwrvzT0v395aSF5lgoVCDCWBn34/IfwhSJ+EDdb6oxYnedxaa5U0OaVVXVYWppVIyCUoht4/a8pILoiWbkn41tkgZJI44CBqIiQvkdr6q5IPJAghb9JDTr7mwxukrLguVnoi5a6Tv/t5oLXLuNg3kwSZVxPh1ReetaRCOZlVl5wwswMzQcWzUCBYA4fwKEMtvGlQc9MrZUfjpPS0h6RTJvB/RsE7EQnagwD18gqn/eWa4JnPSmVeALlQwjn5sfr0RK3j4zrv7zStw2RySLVq1A7iaGPkd/uGlZXxG0SoltN0OeksNq8ZHBnit22hetoAe5SQ3+JFJoN6JHcsMNLBLs="
+  file_glob: true
+  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
+  on:
+    condition: $TRAVIS_RUST_VERSION = stable
+    tags: true
+  provider: releases
+  skip_cleanup: true
+
+cache: cargo
+before_cache:
+  - chmod -R a+r $HOME/.cargo
+
+notifications:
+  email:
+    on_success: never

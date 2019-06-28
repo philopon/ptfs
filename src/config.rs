@@ -5,6 +5,7 @@ use std::path::PathBuf;
 use aes_ctr::stream_cipher::generic_array::typenum::uint::Unsigned;
 use aes_ctr::stream_cipher::{NewStreamCipher, SyncStreamCipher};
 
+use rustc_hex::FromHex;
 use failure::{Error, Fail};
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
@@ -56,10 +57,8 @@ impl Config {
         match &self.password {
             None => Ok(None),
             Some(p) => {
-                let mut pwd = vec![0; 256 / 8];
-                faster_hex::hex_decode(p.as_bytes(), &mut pwd)?;
                 Ok(Some(CipherGen::new(
-                    pwd,
+                    p.from_hex()?,
                     crate::app::NONCE.to_owned().to_vec(),
                 )?))
             }

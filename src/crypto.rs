@@ -4,6 +4,7 @@ use aes_ctr::stream_cipher::SyncStreamCipher;
 use failure::Error;
 use reqwest::Client;
 use sha2::{Digest, Sha256};
+use rustc_hex::ToHex;
 
 use crate::api;
 use crate::config::Config;
@@ -37,7 +38,7 @@ fn enable_crypto(mut config: Config) -> Result<(), Error> {
     hasher.input(&account.account_id);
     let password = rpassword::read_password_from_tty(Some("type encrypto password: "))?;
     hasher.input(&password);
-    let hashed = faster_hex::hex_string(&hasher.result().to_vec())?;
+    let hashed = hasher.result().to_vec().to_hex();
     config.password = Some(hashed);
     config.save()?;
     log::info!("crypto file enabled");
