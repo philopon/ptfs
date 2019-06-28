@@ -6,6 +6,7 @@ use reqwest::{header, header::HeaderName, Body, Client};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sha2::{Digest, Sha256};
+use rustc_hex::ToHex;
 
 use crate::app;
 use crate::url;
@@ -177,7 +178,7 @@ pub fn download<W: Write>(
 
     let mut hasher = Sha256::new();
     hasher.input(&hashes);
-    Ok(faster_hex::hex_string(&hasher.result().to_vec()).map(ContentHash)?)
+    Ok(ContentHash(hasher.result().to_vec().to_hex()))
 }
 
 #[derive(Debug, Deserialize, Serialize)]

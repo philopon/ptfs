@@ -17,10 +17,10 @@ failure = "0.1.5"
 env_logger = "0.6.1"
 log = "0.4.6"
 sha2 = "0.8.0"
-faster-hex = "0.3.1"
 indicatif = "0.11.0"
 rpassword = "3.0.2"
 aes-ctr = "0.3.0"
+rustc-hex = "2.0.1"
 
 [profile.release]
 lto = true
