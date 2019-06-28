@@ -92,8 +92,8 @@ pub fn run(paths: &[PathBuf], name: &str, quiet: bool) -> Result<(), Error> {
             &format!("/{}", name),
             io::stdin(),
         ) {
-            Ok(()) => log::info!("stdin is uploaded to Dropbox"),
-            Err(e) => log::error!("stdin is not uploaded to Dropbox: {}", e),
+            Ok(()) => log::info!("{} is uploaded to Dropbox", name),
+            Err(e) => log::error!("{} is not uploaded to Dropbox: {}", name, e),
         }
     }
 
